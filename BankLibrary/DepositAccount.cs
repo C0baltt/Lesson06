@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace BankLibrary
 {
@@ -13,7 +13,8 @@ namespace BankLibrary
 
         public override void Withdraw(decimal amount)
         {
-            if (Days / 30 == 0)
+            int termOfDeposit = 30;
+            if ((Days / termOfDeposit) == 0)
             {
                 throw new InvalidOperationException("Cannot withdraw money.");
             }

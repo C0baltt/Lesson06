@@ -5,7 +5,7 @@ namespace BankApplication
 {
     class Program
     {
-        private static Bank<Account> _bank1 = new Bank<Account>();
+        private static Bank<Account> _bank = new Bank<Account>();
         
         static void Main(string[] args)
         {
@@ -63,7 +63,7 @@ namespace BankApplication
             Console.WriteLine("Select an account type: \n 1. On-Demand \n 2. Deposit");
             var type = Enum.Parse<AccountType>(Console.ReadLine()!);
             
-            _bank1.OpenAccount(new OpenAccountParameters
+            _bank.OpenAccount(new OpenAccountParameters
             {
                 Amount = sum,
                 Type = type,
@@ -79,7 +79,7 @@ namespace BankApplication
             Console.WriteLine("Enter account id: ");
             int id = Convert.ToInt32(Console.ReadLine());
 
-            // Withdraw;
+            Account.Id
         }
 
         private static void Put()
@@ -102,6 +102,10 @@ namespace BankApplication
         }
 
         private static void NotifyAccountCreated(string message)
+        {
+            Console.WriteLine(message);
+
+        }private static void NotifyAccountClosed(string message)
         {
             Console.WriteLine(message);
         }
