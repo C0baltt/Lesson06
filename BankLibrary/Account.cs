@@ -1,9 +1,17 @@
-using System;
+﻿using System;
 
 namespace BankLibrary
 {
     public delegate void AccountCreated(string message);
-    
+
+    public delegate void AccountOpened(string messege);
+
+    public delegate void AccountClosed(string messege);
+
+    public delegate void AccountPut(string messege);
+
+    public delegate void AccountWithdrawn(string messege);
+
     public abstract class Account
     {
         private static int _counter = 0;
@@ -13,6 +21,14 @@ namespace BankLibrary
         private AccountState _state;
 
         public event AccountCreated Created;
+
+        public event AccountOpened Opened;
+
+        public event AccountClosed Closed;
+
+        public event AccountPut Puted;
+
+        public event AccountWithdrawn Withdrawn;
 
         public Account(decimal amount)
         {
@@ -27,7 +43,7 @@ namespace BankLibrary
 
             _state = AccountState.Opened;
             IncrementDays();
-            Created?.Invoke("Account created.");
+            Created?.Invoke($"Account created. Your account id {Id}");
         }
         
         public virtual void Close()
@@ -35,6 +51,8 @@ namespace BankLibrary
             AssertValidState(AccountState.Opened);
     
             _state = AccountState.Closed;
+
+            Closed?.Invoke("Account closed.");
         }
         
         public virtual void Put(decimal amount)
@@ -42,6 +60,8 @@ namespace BankLibrary
             AssertValidState(AccountState.Opened);
 
             _amount += amount;
+
+            Puted?.Invoke($"Amount {amount} credited. The amount of money in your account {_amount}.");
         }
         
         public virtual void Withdraw(decimal amount)
@@ -54,6 +74,8 @@ namespace BankLibrary
             }
 
             _amount -= amount;
+
+            Withdrawn?.Invoke($"Amount {amount} withdrawn. The amount of money in your account {_amount}.");
         }
         
         public abstract AccountType Type { get; }
