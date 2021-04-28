@@ -1,4 +1,4 @@
-namespace BankLibrary
+﻿namespace BankLibrary
 {
     public class OnDemandAccount : Account
     {
@@ -8,5 +8,7 @@ namespace BankLibrary
         }
 
         public override AccountType Type => AccountType.OnDemand;
+
+        public new BankType BankType => BankType.OnDemandAccount;
     }
 }

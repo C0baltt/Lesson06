@@ -7,9 +7,11 @@ namespace BankLibrary
         public decimal Amount { get; set; }
         public int Id { get; set; }
 
+        public MoneyPutted MoneyPutted { get; set; }
+
         void Message(int _amount, int amount, string action)
         {
-            Console.WriteLine($"current balance {_amount} you {action} {amount}");
+            Console.WriteLine($"Current balance {_amount} you {action} {amount}");
         }
     }
 }

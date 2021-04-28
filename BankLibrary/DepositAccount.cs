@@ -11,6 +11,20 @@ namespace BankLibrary
 
         public override AccountType Type => AccountType.Deposit;
 
+        public new BankType BankType => BankType.DepositAccount;
+
+        public override void Put(decimal amount)
+        {
+            CheckPastDays("Cannot put money.");
+            base.Put(amount);
+        }
+
+        public override void CalculatePercentage()
+        {
+            CheckPastDays(string.Empty);
+            base.CalculatePercentage();
+        }
+
         public override void Withdraw(decimal amount)
         {
             int termOfDeposit = 30;

@@ -60,5 +60,14 @@ namespace BankLibrary
             account.Created += accountCreated;
             _accounts.Add(account);
         }
+
+        public void ClosedAccount(CloseAccountParameters parameters)
+        {
+            AssertValidId(parameters.Id);
+            var account = _accounts[parameters.Id];
+            AddAndDeleteCloseEvent(parameters, account);
+            _accounts.Insert(parameters.Id, account);
+        }
+
     }
 }
