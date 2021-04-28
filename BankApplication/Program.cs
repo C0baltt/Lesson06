@@ -43,7 +43,7 @@ namespace BankApplication
                             alive = false;
                             continue;
                     }
-                    // CalculatePercentage
+
                 }
                 catch (Exception ex)
                 {
@@ -78,13 +78,12 @@ namespace BankApplication
 
             Console.WriteLine("Enter account id: ");
             int id = Convert.ToInt32(Console.ReadLine());
-            //AccountWithdrawn AccountWithdrawn
 
-            _bank.
-
-            AccountWithdrawn = NotifyAccountCreated;
-
-            
+            _bank.Withdraw(new Withdraw {
+                Amount = sum,
+                Id = id - 1,
+                AccountWithdrawn = NotifyAccountWithdrawn
+            });
         }
 
         private static void Put()
@@ -95,7 +94,7 @@ namespace BankApplication
             Console.WriteLine("Enter account id: ");
             int id = Convert.ToInt32(Console.ReadLine());
 
-            // Put
+            _bank.Put(new Put { Amount = sum, Id = id - 1 });
         }
 
         private static void CloseAccount()
@@ -103,19 +102,23 @@ namespace BankApplication
             Console.WriteLine("Enter the account id to close: ");
             int id = Convert.ToInt32(Console.ReadLine());
 
-            // Close
+            _bank.CloseAccount(id - 1);
+        }
+
+        private static void SkipDay()
+        {
+            _bank.SkipDay();
+            Console.ReadKey();
         }
 
         private static void NotifyAccountCreated(string message)
         {
             Console.WriteLine(message);
-
         }
 
         private static void NotifyAccountClosed(string message)
         {
             Console.WriteLine(message);
-
         }
 
         private static void NotifyAccountWithdrawn(string message)

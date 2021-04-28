@@ -3,14 +3,12 @@
 namespace BankLibrary
 {
     public delegate void AccountCreated(string message);
-
     public delegate void AccountOpened(string messege);
-
     public delegate void AccountClosed(string messege);
-
     public delegate void AccountPut(string messege);
+    
 
-    public delegate void AccountWithdrawn(string messege);
+    public delegate void AccountHandlerStateSum();
 
     public abstract class Account
     {
@@ -21,14 +19,19 @@ namespace BankLibrary
         private AccountState _state;
 
         public event AccountCreated Created;
-
         public event AccountOpened Opened;
-
         public event AccountClosed Closed;
-
         public event AccountPut Puted;
+        
+        public event AccountHandlerStateSum HandlerStateSum;
 
-        public event AccountWithdrawn Withdrawn;
+        public decimal Amount
+        {
+            get
+            {
+                return _amount;
+            }
+        }
 
         public Account(decimal amount)
         {
@@ -79,6 +82,11 @@ namespace BankLibrary
         }
         
         public abstract AccountType Type { get; }
+
+        public void AccrualOfPercent(decimal Percent)
+        {
+            _amount += ((_amount / 100) * Percent);
+        }
 
         private void AssertValidState(AccountState validState)
         {
