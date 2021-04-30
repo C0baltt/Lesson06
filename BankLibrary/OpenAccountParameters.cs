@@ -1,4 +1,5 @@
-﻿namespace BankLibrary
+﻿using System;
+namespace BankLibrary
 {
     public class OpenAccountParameters
     {

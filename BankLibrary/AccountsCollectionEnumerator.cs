@@ -6,7 +6,7 @@ namespace BankLibrary
     public class AccountsCollectionEnumerator : IEnumerator<Account>
     {
         private readonly List<Account> _accounts;
-        private int position = -1;
+        private int _position = -1;
 
         public AccountsCollectionEnumerator(List<Account> accounts)
         {
@@ -17,9 +17,9 @@ namespace BankLibrary
         {
             get
             {
-                if (position == -1 || position >= _accounts.Count)
+                if (_position == -1 || _position >= _accounts.Count)
                     throw new InvalidOperationException();
-                return _accounts[position];
+                return _accounts[_position];
             }
         }
 
@@ -29,9 +29,9 @@ namespace BankLibrary
 
         public bool MoveNext()
         {
-            if (position < _accounts.Count)
+            if (_position < _accounts.Count)
             {
-                position++;
+                _position++;
                 return true;
             }
             else
@@ -42,16 +42,16 @@ namespace BankLibrary
 
         public void Reset()
         {
-            position = -1;
+            _position = -1;
         }
 
         Account IEnumerator<Account>.Current
         {
             get
             {
-                if (position == -1 || position >= _accounts.Count)
+                if (_position == -1 || _position >= _accounts.Count)
                     throw new InvalidOperationException();
-                return _accounts[position];
+                return _accounts[_position];
             }
         }
     }

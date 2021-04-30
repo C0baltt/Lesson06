@@ -70,16 +70,17 @@ namespace BankApplication
             Console.WriteLine("Enter percentage: ");
             decimal percentage = Convert.ToDecimal(Console.ReadLine());
 
-            var bankType = Enum.Parse<BankType>(_bank.GetType().GetGenericArguments()[0].Name);
+            //var bankType = Enum.Parse<BankType>(_bank.GetType().GetGenericArguments()[0].Name);
 
             _bank.OpenAccount(new OpenAccountParameters
             {
                 Amount = sum,
                 Type = type,
-                BankType = bankType,
                 Percentage = percentage,
-                AccountCreated = Notify
-                //AccountCreated = NotifyAccountCreated
+                AccountCreated = Notify,
+                AccountClosed = Notify,
+                MoneyPut = Notify,
+                MoneyWithdrawn = Notify
             });
         }
 
@@ -94,8 +95,7 @@ namespace BankApplication
             _bank.WithdrawMoney(new WithdrawAccountParameters
             {
                 Amount = sum,
-                Id = id,
-                MoneyWithdrawn = Notify
+                Id = id
             });
         }
 
@@ -130,20 +130,20 @@ namespace BankApplication
             Console.WriteLine(message);
         }
 
-            /*private static void NotifyAccountCreated(string message)
-            {
-                Console.WriteLine(message);
-            }
-
-            private static void NotifyAccountClosed(string message)
-            {
-                Console.WriteLine(message);
-            }*/
-
-            private static void NotifyAccountWithdrawn(string message)
-            {
-                Console.WriteLine(message);
-            }
+        /*private static void NotifyAccountCreated(string message)
+        {
+            Console.WriteLine(message);
         }
+
+        private static void NotifyAccountClosed(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        private static void NotifyAccountWithdrawn(string message)
+        {
+            Console.WriteLine(message);
+        }*/
     }
+}
 

@@ -8,7 +8,5 @@
         }
 
         public override AccountType Type => AccountType.OnDemand;
-
-        //public new BankType BankType => BankType.OnDemandAccount;
     }
 }

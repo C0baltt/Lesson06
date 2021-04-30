@@ -20,8 +20,6 @@ namespace BankLibrary
 
         public override AccountType Type => AccountType.Deposit;
 
-        //public new BankType BankType => BankType.DepositAccount;
-
         public override void Put(decimal amount)
         {
             CheckPastDays("Cannot put money.");

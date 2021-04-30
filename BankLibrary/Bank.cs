@@ -8,10 +8,10 @@ namespace BankLibrary
         //private readonly List<T> _accounts = new();
 
         private const string KgkPassPhrase = "CleanUp";
-        private readonly List<Account> _accounts = new();
+        //private readonly List<Account> _accounts = new();
         private readonly List<Locker> _lockers = new();
 
-        //private readonly AccountsCollection _accounts = new();
+        private readonly AccountsCollection _accounts = new();
 
         public int AddLocker(string keyword, object data)
         {
