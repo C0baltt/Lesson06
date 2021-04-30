@@ -5,10 +5,10 @@ namespace BankLibrary
     public delegate void AccountCreated(string message);
     public delegate void AccountOpened(string messege);
     public delegate void AccountClosed(string messege);
-    public delegate void AccountPut(string messege);
-    
+    public delegate void MoneyPutted(string messege);
+    public delegate void MoneyWithdrawn(string message);
 
-    public delegate void AccountHandlerStateSum();
+    //public delegate void AccountHandlerStateSum();
 
     public abstract class Account
     {
@@ -16,14 +16,16 @@ namespace BankLibrary
         private decimal _amount;
         private int _id;
         private int _days = 0;
+        private decimal _percentage;
         private AccountState _state;
 
         public event AccountCreated Created;
         public event AccountOpened Opened;
         public event AccountClosed Closed;
-        public event AccountPut Puted;
-        
-        public event AccountHandlerStateSum HandlerStateSum;
+        public event MoneyPutted Puted;
+        public event MoneyWithdrawn Withdrawn;
+
+        //public event AccountHandlerStateSum HandlerStateSum;
 
         public decimal Amount
         {
@@ -33,11 +35,12 @@ namespace BankLibrary
             }
         }
 
-        public Account(decimal amount)
+        public Account(decimal amount, decimal percentage)
         {
             _amount = amount;
             _state = AccountState.Created;
-            _id = ++_counter;
+            _id = _counter++;
+            _percentage = percentage;
         }
 
         public virtual void Open()
@@ -63,7 +66,6 @@ namespace BankLibrary
             AssertValidState(AccountState.Opened);
 
             _amount += amount;
-
             Puted?.Invoke($"Amount {amount} credited. The amount of money in your account {_amount}.");
         }
         
@@ -77,15 +79,25 @@ namespace BankLibrary
             }
 
             _amount -= amount;
-
             Withdrawn?.Invoke($"Amount {amount} withdrawn. The amount of money in your account {_amount}.");
         }
         
         public abstract AccountType Type { get; }
 
-        public void AccrualOfPercent(decimal Percent)
+        public BankType BankType => BankType.Account;
+
+        public int Id => _id;
+
+        public void IncrementDays()
         {
-            _amount += ((_amount / 100) * Percent);
+            _days++;
+        }
+
+        public virtual void CalculatePercentage()
+        {
+            AssertValidState(AccountState.Opened);
+
+            _amount += _amount * _percentage / 100;
         }
 
         private void AssertValidState(AccountState validState)
@@ -97,11 +109,7 @@ namespace BankLibrary
         }
 
         protected int Days => _days;
-        public int Id => _id;
 
-        public void IncrementDays()
-        {
-            _days++;
-        }
+        protected decimal Percentage => _percentage;
     }
 }

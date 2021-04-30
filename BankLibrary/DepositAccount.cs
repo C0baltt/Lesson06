@@ -4,8 +4,8 @@ namespace BankLibrary
 {
     public class DepositAccount : Account
     {
-        public DepositAccount(decimal amount) 
-            : base(amount)
+        public DepositAccount(decimal amount, decimal percentage) 
+            : base(amount, percentage)
         {
         }
 
@@ -19,21 +19,25 @@ namespace BankLibrary
             base.Put(amount);
         }
 
+        public override void Withdraw(decimal amount)
+        {
+            CheckPastDays("Cannot withdraw money.");
+            base.Withdraw(amount);
+        }
+
         public override void CalculatePercentage()
         {
             CheckPastDays(string.Empty);
             base.CalculatePercentage();
         }
 
-        public override void Withdraw(decimal amount)
+        private void CheckPastDays(string message)
         {
             int termOfDeposit = 30;
-            if ((Days / termOfDeposit) == 0)
+            if (Days / termOfDeposit == 0)
             {
-                throw new InvalidOperationException("Cannot withdraw money.");
+                throw new InvalidOperationException(message);
             }
-            
-            base.Withdraw(amount);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace BankApplication
                 Console.Clear();
                 ConsoleColor color = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine("1. Open Account \t 2. Withdraw sum \t 3. Add sum");
+                Console.WriteLine("1. Open Account \t 2. WithdrawAccountParameters sum \t 3. Add sum");
                 Console.WriteLine("4. Close Account \t 5. Skip day \t 6. Exit program");
                 Console.WriteLine("Enter the item number:");
                 Console.ForegroundColor = color;
@@ -43,7 +43,6 @@ namespace BankApplication
                             alive = false;
                             continue;
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -55,19 +54,32 @@ namespace BankApplication
             }
         }
 
+        private static void NextDay()
+        {
+            _bank.IncrementDay();
+        }
+
         private static void OpenAccount()
         {
             Console.WriteLine("Specify the sum to create an account: ");
             decimal sum = Convert.ToDecimal(Console.ReadLine());
 
             Console.WriteLine("Select an account type: \n 1. On-Demand \n 2. Deposit");
-            var type = Enum.Parse<AccountType>(Console.ReadLine()!);
+            var type = Enum.Parse<AccountType>(Console.ReadLine());
+
+            Console.WriteLine("Enter percentage: ");
+            decimal percentage = Convert.ToDecimal(Console.ReadLine());
+
+            var bankType = Enum.Parse<BankType>(_bank.GetType().GetGenericArguments()[0].Name);
 
             _bank.OpenAccount(new OpenAccountParameters
             {
                 Amount = sum,
                 Type = type,
-                AccountCreated = NotifyAccountCreated
+                BankType = bankType,
+                Percentage = percentage,
+                AccountCreated = Notify
+                //AccountCreated = NotifyAccountCreated
             });
         }
 
@@ -79,7 +91,7 @@ namespace BankApplication
             Console.WriteLine("Enter account id: ");
             int id = Convert.ToInt32(Console.ReadLine());
 
-            _bank.Withdraw(new Withdraw {
+            _bank.Withdraw(new WithdrawAccountParameters {new WithdrawAccountParameters
                 Amount = sum,
                 Id = id - 1,
                 AccountWithdrawn = NotifyAccountWithdrawn
@@ -94,7 +106,12 @@ namespace BankApplication
             Console.WriteLine("Enter account id: ");
             int id = Convert.ToInt32(Console.ReadLine());
 
-            _bank.Put(new Put { Amount = sum, Id = id - 1 });
+            _bank.Put(new PutAccountParameters
+            {
+                Amount = sum,
+                Id = id,
+                MoneyPutted = Notify
+            });
         }
 
         private static void CloseAccount()
@@ -102,29 +119,33 @@ namespace BankApplication
             Console.WriteLine("Enter the account id to close: ");
             int id = Convert.ToInt32(Console.ReadLine());
 
-            _bank.CloseAccount(id - 1);
+            _bank.ClosedAccount(new CloseAccountParameters
+            {
+                Id = id - 1,
+                AccountClosed = Notify
+            });
         }
 
-        private static void SkipDay()
-        {
-            _bank.SkipDay();
-            Console.ReadKey();
-        }
+            private static void SkipDay()
+            {
+                _bank.SkipDay();
+                Console.ReadKey();
+            }
 
-        private static void NotifyAccountCreated(string message)
-        {
-            Console.WriteLine(message);
-        }
+            private static void NotifyAccountCreated(string message)
+            {
+                Console.WriteLine(message);
+            }
 
-        private static void NotifyAccountClosed(string message)
-        {
-            Console.WriteLine(message);
-        }
+            private static void NotifyAccountClosed(string message)
+            {
+                Console.WriteLine(message);
+            }
 
-        private static void NotifyAccountWithdrawn(string message)
-        {
-            Console.WriteLine(message);
+            private static void NotifyAccountWithdrawn(string message)
+            {
+                Console.WriteLine(message);
+            }
         }
     }
-}
 

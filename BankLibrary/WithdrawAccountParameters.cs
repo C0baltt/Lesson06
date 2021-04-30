@@ -2,11 +2,12 @@
 
 {
     public delegate void AccountWithdrawn(string messege);
-    public class Withdraw
+    public class WithdrawAccountParameters
     {
-        public event AccountWithdrawn Withdrawn;
+        public int Id { get; set; }
 
         public decimal Amount { get; set; }
-        public int Id { get; set; }
+
+        public MoneyWithdrawn MoneyWithdrawn { get; set; }
     }
 }
