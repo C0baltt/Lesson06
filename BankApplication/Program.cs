@@ -12,7 +12,7 @@ namespace BankApplication
             bool alive = true;
             while (alive)
             {
-                Console.Clear();
+                //Console.Clear();
                 ConsoleColor color = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("1. Open Account \t 2. WithdrawAccountParameters sum \t 3. Add sum");
@@ -91,10 +91,11 @@ namespace BankApplication
             Console.WriteLine("Enter account id: ");
             int id = Convert.ToInt32(Console.ReadLine());
 
-            _bank.Withdraw(new WithdrawAccountParameters {new WithdrawAccountParameters
+            _bank.WithdrawMoney(new WithdrawAccountParameters
+            {
                 Amount = sum,
-                Id = id - 1,
-                AccountWithdrawn = NotifyAccountWithdrawn
+                Id = id,
+                MoneyWithdrawn = Notify
             });
         }
 
@@ -106,11 +107,10 @@ namespace BankApplication
             Console.WriteLine("Enter account id: ");
             int id = Convert.ToInt32(Console.ReadLine());
 
-            _bank.Put(new PutAccountParameters
+            _bank.PutAmount(new PutAccountParameters
             {
                 Amount = sum,
-                Id = id,
-                MoneyPutted = Notify
+                Id = id
             });
         }
 
@@ -121,18 +121,16 @@ namespace BankApplication
 
             _bank.ClosedAccount(new CloseAccountParameters
             {
-                Id = id - 1,
-                AccountClosed = Notify
+                Id = id - 1
             });
         }
 
-            private static void SkipDay()
-            {
-                _bank.SkipDay();
-                Console.ReadKey();
-            }
+        private static void Notify(string message)
+        {
+            Console.WriteLine(message);
+        }
 
-            private static void NotifyAccountCreated(string message)
+            /*private static void NotifyAccountCreated(string message)
             {
                 Console.WriteLine(message);
             }
@@ -140,7 +138,7 @@ namespace BankApplication
             private static void NotifyAccountClosed(string message)
             {
                 Console.WriteLine(message);
-            }
+            }*/
 
             private static void NotifyAccountWithdrawn(string message)
             {

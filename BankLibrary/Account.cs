@@ -19,19 +19,20 @@ namespace BankLibrary
         private decimal _percentage;
         private AccountState _state;
 
-        public event AccountCreated Created;
-        public event AccountOpened Opened;
-        public event AccountClosed Closed;
-        public event MoneyPutted Puted;
-        public event MoneyWithdrawn Withdrawn;
+        public event Action<string> Created;
+        public event Action<string> Closed;
+        public event Action<string> PutMoney;
+        public event Action<string> Withdrawn;
 
-        //public event AccountHandlerStateSum HandlerStateSum;
+        protected int Days => _days;
 
-        public decimal Amount
+        protected decimal Percentage => _percentage;
+
+        private void AssertValidState(AccountState validState)
         {
-            get
+            if (_state != validState)
             {
-                return _amount;
+                throw new InvalidOperationException($"Invalid account state: {_state}");
             }
         }
 
@@ -57,7 +58,6 @@ namespace BankLibrary
             AssertValidState(AccountState.Opened);
     
             _state = AccountState.Closed;
-
             Closed?.Invoke("Account closed.");
         }
         
@@ -66,7 +66,7 @@ namespace BankLibrary
             AssertValidState(AccountState.Opened);
 
             _amount += amount;
-            Puted?.Invoke($"Amount {amount} credited. The amount of money in your account {_amount}.");
+            PutMoney?.Invoke($"Amount {amount} credited. The amount of money in your account {_amount}.");
         }
         
         public virtual void Withdraw(decimal amount)
@@ -84,7 +84,7 @@ namespace BankLibrary
         
         public abstract AccountType Type { get; }
 
-        public BankType BankType => BankType.Account;
+        //public BankType BankType => BankType.Account;
 
         public int Id => _id;
 
@@ -99,17 +99,5 @@ namespace BankLibrary
 
             _amount += _amount * _percentage / 100;
         }
-
-        private void AssertValidState(AccountState validState)
-        {
-            if (_state != validState)
-            {
-                throw new InvalidOperationException($"Invalid account state: {_state}");
-            }
-        }
-
-        protected int Days => _days;
-
-        protected decimal Percentage => _percentage;
     }
 }
