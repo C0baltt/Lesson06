@@ -53,7 +53,6 @@ namespace BankLibrary
         private void CreateAccount(OpenAccountParameters parameters, Func<T> creator)
         {
             var account = creator();
-
             AddSubscriptions(parameters, account);
 
             account.Open();
@@ -88,13 +87,13 @@ namespace BankLibrary
             }
         }
 
-        private static void ClearSubscriptions(CloseAccountParameters parameters, T account)
+        /*private static void ClearSubscriptions(CloseAccountParameters parameters, T account)
         {
             account.Created -= parameters.AccountCreated;
             account.Closed -= parameters.AccountClosed;
             account.PutMoney -= parameters.MoneyPut;
             account.Withdrawn -= parameters.MoneyWithdrawn;
-        }
+        }*/
 
         public void OpenAccount(OpenAccountParameters parameters)
         {
@@ -111,7 +110,7 @@ namespace BankLibrary
 
             var account = _accounts.GetItem(parameters.Id);
             account.Close();
-            ClearSubscriptions(parameters, (T)account);
+            //ClearSubscriptions(parameters, (T)account);
         }
 
         public void PutAmount(PutAccountParameters parameters)

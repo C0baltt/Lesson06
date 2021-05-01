@@ -2,15 +2,6 @@
 
 namespace BankLibrary
 {
-    /*
-    public delegate void AccountCreated(string message);
-    public delegate void AccountOpened(string message);
-    public delegate void AccountClosed(string message);
-    public delegate void MoneyPutted(string message);
-    public delegate void MoneyWithdrawn(string message);//*/
-
-    //public delegate void AccountHandlerStateSum();
-
     public abstract class Account
     {
         private static int _counter = 0;

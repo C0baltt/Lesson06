@@ -12,7 +12,6 @@ namespace BankApplication
             bool alive = true;
             while (alive)
             {
-                //Console.Clear();
                 ConsoleColor color = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("1. Open Account \t 2. WithdrawAccountParameters sum \t 3. Add sum");
@@ -38,6 +37,7 @@ namespace BankApplication
                             CloseAccount();
                             break;
                         case 5:
+                            NextDay();
                             break;
                         case 6:
                             alive = false;
@@ -69,8 +69,6 @@ namespace BankApplication
 
             Console.WriteLine("Enter percentage: ");
             decimal percentage = Convert.ToDecimal(Console.ReadLine());
-
-            //var bankType = Enum.Parse<BankType>(_bank.GetType().GetGenericArguments()[0].Name);
 
             _bank.OpenAccount(new OpenAccountParameters
             {
@@ -121,7 +119,7 @@ namespace BankApplication
 
             _bank.ClosedAccount(new CloseAccountParameters
             {
-                Id = id - 1
+                Id = id
             });
         }
 
@@ -129,21 +127,6 @@ namespace BankApplication
         {
             Console.WriteLine(message);
         }
-
-        /*private static void NotifyAccountCreated(string message)
-        {
-            Console.WriteLine(message);
-        }
-
-        private static void NotifyAccountClosed(string message)
-        {
-            Console.WriteLine(message);
-        }
-
-        private static void NotifyAccountWithdrawn(string message)
-        {
-            Console.WriteLine(message);
-        }*/
     }
 }
 
