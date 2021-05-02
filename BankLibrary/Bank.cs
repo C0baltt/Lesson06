@@ -6,7 +6,6 @@ namespace BankLibrary
     public class Bank<T> where T : Account
     {
         private const string KgkPassPhrase = "CleanUp";
-        //private readonly List<Locker> _lockers = new();
         private readonly AccountsCollection _accounts = new();
         private readonly Dictionary<Locker, object> _lockers = new();
         
@@ -25,11 +24,9 @@ namespace BankLibrary
                 {
                     return $"Watch your data: {locker.Value}";
                 }
-                return $"This pair {id} - {keyword} does not exist";
             }
 
-            throw new ArgumentOutOfRangeException(
-                $"Cannot find locker with ID: {_lockers} or keyword does not match");
+            return $"Cannot find locker with ID: {id} or keyword does not match";
         }
 
         public TU GetLockerData<TU>(int id, string keyword)
