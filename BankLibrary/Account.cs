@@ -2,39 +2,44 @@
 
 namespace BankLibrary
 {
-    public delegate void AccountCreated(string message);
-
-    public delegate void AccountOpened(string messege);
-
-    public delegate void AccountClosed(string messege);
-
-    public delegate void AccountPut(string messege);
-
-    public delegate void AccountWithdrawn(string messege);
-
+    
     public abstract class Account
     {
         private static int _counter = 0;
         private decimal _amount;
         private int _id;
         private int _days = 0;
+        private decimal _percentage;
         private AccountState _state;
 
-        public event AccountCreated Created;
+        public event Action<string> Created;
+        public event Action<string> Closed;
+        public event Action<string> PutMoney;
+        public event Action<string> Withdrawn;
 
-        public event AccountOpened Opened;
+        protected int Days => _days;
 
-        public event AccountClosed Closed;
+        protected decimal Percentage => _percentage;
 
-        public event AccountPut Puted;
+        private void AssertValidState(AccountState validState)
+        {
+            if (_state != validState)
+            {
+                throw new InvalidOperationException($"Invalid account state: {_state}");
+            }
+        }
 
-        public event AccountWithdrawn Withdrawn;
+        /*private bool AssertValidState(AccountState validState)
+        {
+            return _state != validState;
+        }*/
 
-        public Account(decimal amount)
+        public Account(decimal amount, decimal percentage)
         {
             _amount = amount;
             _state = AccountState.Created;
-            _id = ++_counter;
+            _id = _counter++;
+            _percentage = percentage;
         }
 
         public virtual void Open()
@@ -51,7 +56,6 @@ namespace BankLibrary
             AssertValidState(AccountState.Opened);
     
             _state = AccountState.Closed;
-
             Closed?.Invoke("Account closed.");
         }
         
@@ -60,8 +64,7 @@ namespace BankLibrary
             AssertValidState(AccountState.Opened);
 
             _amount += amount;
-
-            Puted?.Invoke($"Amount {amount} credited. The amount of money in your account {_amount}.");
+            PutMoney?.Invoke($"Amount {amount} credited. The amount of money in your account {_amount}.");
         }
         
         public virtual void Withdraw(decimal amount)
@@ -74,26 +77,28 @@ namespace BankLibrary
             }
 
             _amount -= amount;
-
             Withdrawn?.Invoke($"Amount {amount} withdrawn. The amount of money in your account {_amount}.");
         }
         
         public abstract AccountType Type { get; }
 
-        private void AssertValidState(AccountState validState)
-        {
-            if (_state != validState)
-            {
-                throw new InvalidOperationException($"Invalid account state: {_state}");
-            }
-        }
-
-        protected int Days => _days;
         public int Id => _id;
 
         public void IncrementDays()
         {
             _days++;
+        }
+
+        public virtual void CalculatePercentage()
+        {
+            AssertValidState(AccountState.Opened);
+
+            _amount += _amount * _percentage / 100;
+        }
+
+        public virtual bool IsStateClosed()
+        {
+            return _state == AccountState.Closed;
         }
     }
 }

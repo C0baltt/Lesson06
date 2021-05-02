@@ -1,11 +1,9 @@
 ﻿using System;
 namespace BankLibrary
 {
-    public class OpenAccountParameters
+    public class CloseAccountParameters
     {
-        public AccountType Type { get; set; }
-        public decimal Amount { get; set; }
-        public decimal Percentage { get; set; }
+        public int Id { get; set; }
         public Action<string> AccountCreated { get; set; }
         public Action<string> MoneyWithdrawn { get; set; }
         public Action<string> AccountClosed { get; set; }
