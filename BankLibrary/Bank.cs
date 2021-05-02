@@ -5,33 +5,28 @@ namespace BankLibrary
 {
     public class Bank<T> where T : Account
     {
-        //private readonly List<T> _accounts = new();
-
         private const string KgkPassPhrase = "CleanUp";
-        //private readonly List<Account> _accounts = new();
-        private readonly List<Locker> _lockers = new();
-
         private readonly AccountsCollection _accounts = new();
-
-        public int AddLocker(string keyword, object data)
+        private readonly Dictionary<Locker, object> _lockers = new();
+        
+        public int AddLocker(int id, string keyword, object data)
         {
-            var locker = new Locker(_lockers.Count + 1, keyword, data);
-            _lockers.Add(locker);
+            var locker = new Locker(id, keyword);
+            _lockers.Add(locker, data);
             return locker.Id;
         }
 
         public object GetLockerData(int id, string keyword)
         {
-            foreach (Locker locker in _lockers)
+            foreach (KeyValuePair<Locker, object> locker in _lockers)
             {
-                if (locker.Matches(id, keyword))
+                if (locker.Key.Matches(id, keyword))
                 {
-                    return locker.Data;
+                    return $"Watch your data: {locker.Value}";
                 }
             }
 
-            throw new ArgumentOutOfRangeException(
-                $"Cannot find locker with ID: {id} or keyword does not match");
+            return $"Cannot find locker with ID: {id} or keyword does not match";
         }
 
         public TU GetLockerData<TU>(int id, string keyword)
@@ -43,9 +38,9 @@ namespace BankLibrary
         {
             if (passPhrase.Equals(KgkPassPhrase))
             {
-                foreach (var locker in _lockers)
+                foreach (Locker key in _lockers.Keys)
                 {
-                    locker.RemoveData();
+                    _lockers[key] = null;
                 }
             }
         }
@@ -53,7 +48,6 @@ namespace BankLibrary
         private void CreateAccount(OpenAccountParameters parameters, Func<T> creator)
         {
             var account = creator();
-
             AddSubscriptions(parameters, account);
 
             account.Open();
@@ -88,14 +82,6 @@ namespace BankLibrary
             }
         }
 
-        private static void ClearSubscriptions(CloseAccountParameters parameters, T account)
-        {
-            account.Created -= parameters.AccountCreated;
-            account.Closed -= parameters.AccountClosed;
-            account.PutMoney -= parameters.MoneyPut;
-            account.Withdrawn -= parameters.MoneyWithdrawn;
-        }
-
         public void OpenAccount(OpenAccountParameters parameters)
         {
             AssertValidAccount(parameters);
@@ -111,7 +97,7 @@ namespace BankLibrary
 
             var account = _accounts.GetItem(parameters.Id);
             account.Close();
-            ClearSubscriptions(parameters, (T)account);
+            //ClearSubscriptions(parameters, (T)account);
         }
 
         public void PutAmount(PutAccountParameters parameters)
@@ -134,6 +120,10 @@ namespace BankLibrary
         {
             for (int i = 0; i < _accounts.GetCount(); i++)
             {
+                if (_accounts.GetItem(i).IsStateClosed())
+                {
+                    continue;
+                } 
                 _accounts.GetItem(i).IncrementDays();
                 _accounts.GetItem(i).CalculatePercentage();
             }

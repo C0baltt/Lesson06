@@ -2,15 +2,7 @@
 
 namespace BankLibrary
 {
-    /*
-    public delegate void AccountCreated(string message);
-    public delegate void AccountOpened(string message);
-    public delegate void AccountClosed(string message);
-    public delegate void MoneyPutted(string message);
-    public delegate void MoneyWithdrawn(string message);//*/
-
-    //public delegate void AccountHandlerStateSum();
-
+    
     public abstract class Account
     {
         private static int _counter = 0;
@@ -36,6 +28,11 @@ namespace BankLibrary
                 throw new InvalidOperationException($"Invalid account state: {_state}");
             }
         }
+
+        /*private bool AssertValidState(AccountState validState)
+        {
+            return _state != validState;
+        }*/
 
         public Account(decimal amount, decimal percentage)
         {
@@ -97,6 +94,11 @@ namespace BankLibrary
             AssertValidState(AccountState.Opened);
 
             _amount += _amount * _percentage / 100;
+        }
+
+        public virtual bool IsStateClosed()
+        {
+            return _state == AccountState.Closed;
         }
     }
 }
