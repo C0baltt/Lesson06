@@ -133,7 +133,10 @@ namespace BankLibrary
         {
             for (int i = 0; i < _accounts.GetCount(); i++)
             {
-                _accounts.GetItem(i).AccountState
+                if (_accounts.GetItem(i).IsStateClosed())
+                {
+                    continue;
+                } 
                 _accounts.GetItem(i).IncrementDays();
                 _accounts.GetItem(i).CalculatePercentage();
             }

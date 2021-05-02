@@ -29,6 +29,11 @@ namespace BankLibrary
             }
         }
 
+        /*private bool AssertValidState(AccountState validState)
+        {
+            return _state != validState;
+        }*/
+
         public Account(decimal amount, decimal percentage)
         {
             _amount = amount;
@@ -91,6 +96,9 @@ namespace BankLibrary
             _amount += _amount * _percentage / 100;
         }
 
-        public virtual
+        public virtual bool IsStateClosed()
+        {
+            return _state == AccountState.Closed;
+        }
     }
 }
