@@ -2,6 +2,7 @@
 
 namespace BankLibrary
 {
+    
     public abstract class Account
     {
         private static int _counter = 0;
@@ -89,5 +90,7 @@ namespace BankLibrary
 
             _amount += _amount * _percentage / 100;
         }
+
+        public virtual
     }
 }

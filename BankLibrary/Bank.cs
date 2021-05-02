@@ -133,6 +133,7 @@ namespace BankLibrary
         {
             for (int i = 0; i < _accounts.GetCount(); i++)
             {
+                _accounts.GetItem(i).AccountState
                 _accounts.GetItem(i).IncrementDays();
                 _accounts.GetItem(i).CalculatePercentage();
             }
