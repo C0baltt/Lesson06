@@ -14,8 +14,9 @@ namespace BankApplication
             {
                 ConsoleColor color = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine("1. Open Account \t 2. WithdrawAccountParameters sum \t 3. Add sum");
-                Console.WriteLine("4. Close Account \t 5. Skip day \t 6. Exit program");
+                Console.WriteLine("1. Open Account \t 2. Withdraw sum \t 3. Add sum");
+                Console.WriteLine("4. Close Account \t 5. Skip day    \t 6. Open Locker");
+                Console.WriteLine("7. Get data      \t 8. Clear lockers \t 9. Exit program");
                 Console.WriteLine("Enter the item number:");
                 Console.ForegroundColor = color;
                 try
@@ -40,6 +41,15 @@ namespace BankApplication
                             NextDay();
                             break;
                         case 6:
+                            OpenLocker();
+                            break;
+                        case 7:
+                            GetLockerData();
+                            break;
+                        case 8:
+                            VisitKgk();
+                            break;
+                        case 9:
                             alive = false;
                             continue;
                     }
@@ -53,6 +63,40 @@ namespace BankApplication
                 }
             }
         }
+
+        private static void VisitKgk()
+        {
+            Console.WriteLine("Enter special phrase: ");
+            string phrase = Console.ReadLine();
+
+            _bank.VisitKgk(phrase);
+        }
+
+        private static void GetLockerData()
+        {
+            Console.WriteLine("Specify ID: ");
+            int id = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter keyword");
+            string keyword = Console.ReadLine();
+
+            Console.WriteLine($"{_bank.GetLockerData(id, keyword)}");
+        }
+        private static void OpenLocker()
+        {
+            Console.WriteLine("Specify ID: ");
+            int id = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter keyword");
+            string keyword = Console.ReadLine();
+
+
+            Console.WriteLine("Enter something data: ");
+            object data = Console.ReadLine();
+
+            _bank.AddLocker(id, keyword, data);
+        }
+
 
         private static void NextDay()
         {
